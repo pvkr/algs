@@ -6,6 +6,7 @@
     <groupId>com.github.pvkr.algs</groupId>
     <artifactId>unclacified</artifactId>
     <version>1.0</version>
+    <name>Algorithm practice</name>
 
     <dependencies>
         <dependency>
