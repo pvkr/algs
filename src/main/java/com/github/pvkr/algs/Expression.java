@@ -72,25 +72,4 @@ public class Expression {
     private boolean isNumberCharacter(int ch) {
         return ch >= '0' && ch <= '9' || ch == '.';
     }
-
-    public static void main(String[] args) {
-//        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-//        String line = reader.readLine();
-
-        test("1+2-4*3/6");
-        test("1+(2-4)*3/6");
-        test("1+(2-4 )*3/-(6) ");
-        test("1+(2-4 )*(/-6 ");
-        test("1+(2-4 )*3/6 +");
-        test("1+(2-4 )*3/6 + *");
-    }
-
-    private static void test(String expression) {
-        try {
-            System.out.println(expression);
-            System.out.println("result: " + new Expression(expression).parse());
-        } catch (RuntimeException e) {
-            System.out.println("error: " + e.getMessage());
-        }
-    }
 }
