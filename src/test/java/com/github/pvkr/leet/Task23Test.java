@@ -14,10 +14,10 @@ class Task23Test {
     @ParameterizedTest
     @MethodSource("getTestData")
     void test(int[][] kLists, int[] expected) {
-        ListNode[] listNodes = Stream.of(kLists).map(Task23Test::toListNode).toArray(ListNode[]::new);
+        ListNode[] listNodes = Stream.of(kLists).map(ListNode::fromArray).toArray(ListNode[]::new);
         ListNode merged = new Task23().mergeKLists(listNodes);
 
-        assertArrayEquals(expected, fromListNode(merged));
+        assertArrayEquals(expected, ListNode.toArray(merged));
     }
 
     private static Stream<Arguments> getTestData() {
@@ -38,30 +38,9 @@ class Task23Test {
 
     private static int[] list(String array) {
         if (array.equals("[]")) return new int[0];
-        return Arrays.stream(array.replaceAll("( |]|\\[)*", "").split(","))
+        return Arrays.stream(array.replaceAll("([:space]|]|\\[)*", "").split(","))
                 .map(Integer::parseInt)
                 .mapToInt(Integer::intValue)
                 .toArray();
-    }
-
-    private static ListNode toListNode(int[] array) {
-        ListNode listNode = null;
-        for (int i = array.length - 1; i >= 0; i--) {
-            listNode = new ListNode(array[i], listNode);
-        }
-        return listNode;
-    }
-
-    private static int[] fromListNode(ListNode listNode) {
-        int size = 0;
-        for (ListNode iterator = listNode; iterator != null; iterator = iterator.next) size++;
-
-        int[] array = new int[size];
-        ListNode iterator = listNode;
-        for (int i = 0; i < size; i++) {
-            array[i] = iterator.val;
-            iterator = iterator.next;
-        }
-        return array;
     }
 }
