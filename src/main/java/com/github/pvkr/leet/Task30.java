@@ -20,16 +20,13 @@ public class Task30 {
         int wlen = words[0].length();
         for (int i = 0; i < wlen; i++) {
             Map<String, Integer> wordMap = createWordMap(words);
+            int wordCount = 0;
             int wordsInS = (s.length() - i) / wlen;
             for (int j = 0; j < wordsInS; j++) {
-                if (j >= words.length) {
-                    int wordIndex = (j - words.length) * wlen + i;
-                    String pushBackWord = s.substring(wordIndex, wordIndex + wlen);
-
-                    Integer occurrences = wordMap.get(pushBackWord);
-                    if (occurrences != null) {
-                        wordMap.put(pushBackWord, occurrences + 1);
-                    }
+                wordCount++;
+                if (wordCount > words.length) {
+                    pushBack(wordMap, s, i, j - words.length, wlen);
+                    wordCount--;
                 }
 
                 int wordIndex = j * wlen + i;
@@ -38,14 +35,27 @@ public class Task30 {
                 Integer occurrences = wordMap.get(word);
                 if (occurrences != null) {
                     wordMap.put(word, occurrences - 1);
+                } else {
+                    // restart search
+                    for (int k = j - 1; k > j - wordCount; k--)
+                        pushBack(wordMap, s, i, k, wlen);
+                    wordCount = 0;
+                    continue;
                 }
 
-                if (j >= words.length - 1 && containsOnlyZeroes(wordMap))
+                if (wordCount >= words.length && containsOnlyZeroes(wordMap))
                     result.add((j - words.length + 1) * wlen + i);
             }
         }
 
         return result;
+    }
+
+    private void pushBack(Map<String, Integer> wordMap, String s, int wordOffset, int wordIndex, int wordSize) {
+        int offset = wordIndex * wordSize + wordOffset;
+        String pushBackWord = s.substring(offset, offset + wordSize);
+        Integer occurrences = wordMap.get(pushBackWord);
+        wordMap.put(pushBackWord, occurrences + 1);
     }
 
     private Map<String, Integer> createWordMap(String[] words) {
